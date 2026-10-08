@@ -1,0 +1,12 @@
+.git
+.gitignore
+.gradle
+.idea
+**/build
+**/.DS_Store
+*.iml
+ANGENTS.md
+README.md
+docker-compose.yml
+Dockerfile
+.dockerignore
