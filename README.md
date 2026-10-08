@@ -19,9 +19,9 @@ options:
 | Variable | Default | Descripción |
 |----------|---------|-------------|
 | `PORT` | `8080` | Puerto del servidor |
-| `DATABASE_URL` | `postgresql://postgres:postgres@localhost:5432/serviloop` | JDBC (`jdbc:postgresql://…`) o proveedor (`postgresql://user:pass@host:port/db`) |
+| `DATABASE_URL` | **requerido** | JDBC (`jdbc:postgresql://…`) o proveedor (`postgres://` / `postgresql://user:pass@host:port/db`). En hosts remotos agrega `sslmode=require` |
 | `DB_USER` / `DB_PASSWORD` | credenciales del URL | Usuario y contraseña si no vienen en el URL |
-| `DB_POOL_SIZE` | `5` | Tamaño del pool Hikari |
+| `DB_POOL_SIZE` | `10` | Tamaño del pool Hikari |
 | `JWT_SECRET` | `dev-insecure-secret-change-me` | Secreto HMAC256 (**cambiar en producción**) |
 | `JWT_ISSUER` | `serviloopservices` | Emisor del JWT |
 | `JWT_AUDIENCE` | `serviloopservices-client` | Audiencia del JWT |
