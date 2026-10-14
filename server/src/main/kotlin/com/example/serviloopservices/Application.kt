@@ -21,6 +21,7 @@ import com.example.serviloopservices.routes.authRoutes
 import com.example.serviloopservices.routes.tryOnRoutes
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.*
@@ -50,6 +51,11 @@ fun Application.module() {
     val httpClient = HttpClient(CIO) {
         install(ContentNegotiation) {
             json(Json { ignoreUnknownKeys = true; encodeDefaults = true })
+        }
+        install(HttpTimeout) {
+            requestTimeoutMillis = 120_000
+            socketTimeoutMillis = 120_000
+            connectTimeoutMillis = 30_000
         }
     }
     val geminiClient = GeminiClient(httpClient, GeminiConfig.from(env))

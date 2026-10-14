@@ -5,10 +5,12 @@ import io.ktor.client.call.body
 import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import kotlinx.serialization.Serializable
+import org.slf4j.LoggerFactory
 
 data class GeneratedImage(
     val data: String,
@@ -68,7 +70,7 @@ class GeminiClient(
         return GeneratedImage(data = inline.data, mimeType = inline.mimeType)
     }
 
-    private suspend fun generate(model: String, request: GeminiRequest): GeminiResponse? {
+    private suspend fun generate(model: String, request: GeminiRequest): GeminiResponse? = try {
         val response = httpClient.post(
             "https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent",
         ) {
@@ -76,8 +78,19 @@ class GeminiClient(
             contentType(ContentType.Application.Json)
             setBody(request)
         }
-        if (!response.status.isSuccess()) return null
-        return response.body()
+        if (!response.status.isSuccess()) {
+            logger.error("Gemini $model HTTP ${response.status.value}: ${response.bodyAsText().take(500)}")
+            null
+        } else {
+            response.body()
+        }
+    } catch (throwable: Throwable) {
+        logger.error("Gemini $model error", throwable)
+        null
+    }
+
+    private companion object {
+        private val logger = LoggerFactory.getLogger(GeminiClient::class.java)
     }
 }
 
