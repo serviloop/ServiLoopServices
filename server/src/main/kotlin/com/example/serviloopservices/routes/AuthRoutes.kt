@@ -66,8 +66,7 @@ fun Route.authRoutes(useCase: AuthUseCase) {
                 respondAuth(call, useCase.refresh(userId))
             }
 
-            // Called by the client on Firebase's onNewToken so rotation does not wait for the next login.
-            // A null/empty deviceToken clears the stored token.
+
             put("/me/device-token") {
                 val userId = call.userId()
                 if (userId == null) {
