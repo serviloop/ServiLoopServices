@@ -1,5 +1,6 @@
 package com.example.serviloopservices.data.database
 
+import com.example.serviloopservices.data.database.design.Designs
 import com.example.serviloopservices.data.database.user.AUTH_PROVIDER_MAX_LENGTH
 import com.example.serviloopservices.data.database.user.DEVICE_TOKEN_MAX_LENGTH
 import com.example.serviloopservices.data.database.user.FIREBASE_UID_MAX_LENGTH
@@ -26,7 +27,7 @@ object DatabaseFactory {
         )
         Database.connect(dataSource)
         transaction {
-            SchemaUtils.create(Users)
+            SchemaUtils.create(Users, Designs)
         }
     }
 

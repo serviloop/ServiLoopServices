@@ -51,6 +51,33 @@ El login federado usa `FederatedIdentityVerifier`; por defecto está deshabilita
 (`DisabledFederatedIdentityVerifier`) y se debe inyectar una implementación real (Firebase Admin) en
 `Application.module()`.
 
+### API de Try-On
+
+Base: `/tryon` y `/designs`. **Requieren JWT** (`Authorization: Bearer <token>`). Los diseños están
+**scoped por la tienda** del usuario (`store_id`).
+
+| Método | Ruta | Auth | Cuerpo | Respuesta |
+|--------|------|------|--------|-----------|
+| `POST` | `/tryon` | Bearer | `{ image, imageMimeType?, designId, prompt? }` | `200` `TryOnResponse` |
+| `GET` | `/designs` | Bearer | — | `200` `{ designs: [DesignResponse] }` |
+| `POST` | `/designs` | Bearer | `{ name, prompt?, imageBase64, mimeType? }` | `201` `{ id, autoPrompt }` |
+| `DELETE` | `/designs/{id}` | Bearer | — | `204` |
+
+- `TryOnResponse`: `{ image, imageMimeType, model, processingMs }`.
+- `DesignResponse`: `{ id, name, prompt, imageBase64, mimeType }`.
+- Al subir un diseño, el servidor genera una **descripción automática por dedo** con Gemini visión y la
+  guarda como `prompt` del diseño.
+- Errores (`data/enum/TryOnErrorCode.kt`): `INVALID_IMAGE`, `INVALID_DESIGN`, `DESIGN_NOT_FOUND`,
+  `GENERATION_FAILED`, `RATE_LIMITED`, `UNAUTHORIZED`.
+
+Variables de entorno del Try-On:
+
+| Variable | Default | Descripción |
+|----------|---------|-------------|
+| `GEMINI_API_KEY` | **requerido** | API key de Google Gemini |
+| `GEMINI_IMAGE_MODEL` | `gemini-2.5-flash-image` | Modelo de generación de imagen |
+| `GEMINI_VISION_MODEL` | `gemini-3.8-flash` | Modelo de visión (descripción de diseños) |
+
 ---
 
 Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)

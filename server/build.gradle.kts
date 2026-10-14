@@ -22,6 +22,9 @@ dependencies {
     implementation(libs.ktor.serverAuth)
     implementation(libs.ktor.serverAuthJwt)
     implementation(libs.ktor.serverStatusPages)
+    implementation(libs.ktor.clientCore)
+    implementation(libs.ktor.clientCio)
+    implementation(libs.ktor.clientContentNegotiation)
 
     implementation(libs.exposed.core)
     implementation(libs.exposed.jdbc)
