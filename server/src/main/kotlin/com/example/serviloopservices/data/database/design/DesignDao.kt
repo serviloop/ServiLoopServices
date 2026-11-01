@@ -33,7 +33,7 @@ class DesignDao {
         } else {
             Designs.selectAll().where { Designs.storeId eq storeId }
         }
-        rows.map { it.toEntity() }
+        rows.orderBy(Designs.id).map { it.toEntity() }
     }
 
     fun findById(id: Int): DesignEntity? = transaction {
