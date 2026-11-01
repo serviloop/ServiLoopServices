@@ -62,10 +62,11 @@ class TryOnRepositoryImpl(
         val design = designDao.findById(request.designId) ?: return TryOnResult.DesignNotFound
         if (design.storeId != storeId) return TryOnResult.DesignNotFound
 
+        val baseInstruction = TryOnPrompts.instruction(request.category)
         val instruction = if (request.prompt.isNullOrBlank()) {
-            TryOnPrompts.INSTRUCTION
+            baseInstruction
         } else {
-            "${TryOnPrompts.INSTRUCTION}\n\nUser adjustment: ${request.prompt}"
+            "$baseInstruction\n\nUser adjustment: ${request.prompt}"
         }
 
         val started = System.currentTimeMillis()

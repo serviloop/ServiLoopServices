@@ -1,7 +1,14 @@
 package com.example.serviloopservices.data.security
 
-/** Prompts para el análisis de visión y la generación de imagen del Try-On. */
+/**
+ * Prompts del Try-On (visión + generación) en inglés.
+ * La versión legible para revisión está en `docs/tryon-prompts.md`.
+ */
 object TryOnPrompts {
+
+    const val CATEGORY_NAILS = "nails"
+    const val CATEGORY_TATTOO = "tattoo"
+    const val CATEGORY_HAIR = "hair"
 
     val DESCRIBE_PROMPT: String = listOf(
         "Analyze the nail art reference image carefully.",
@@ -16,7 +23,7 @@ object TryOnPrompts {
         "Generate a concise, actionable instruction in ENGLISH, maximum 130 words, suitable for a photorealistic virtual nail try-on model.",
     ).joinToString("\n")
 
-    val INSTRUCTION: String = listOf(
+    val INSTRUCTION_NAILS: String = listOf(
         "TASK: Perform a photorealistic virtual nail try-on using two input images.",
         "",
         "IMAGE ROLES:",
@@ -64,4 +71,91 @@ object TryOnPrompts {
         "FINAL REQUIREMENT:",
         "Return the edited photograph, not a description, collage, illustration or newly generated hand.",
     ).joinToString("\n")
+
+    val INSTRUCTION_TATTOO: String = listOf(
+        "TASK: Perform a photorealistic virtual tattoo try-on using two input images.",
+        "",
+        "IMAGE ROLES:",
+        "- IMAGE 1 is the original real photograph of the body area and MUST remain the base image.",
+        "- IMAGE 2 is the tattoo reference and is the source of the tattoo design only.",
+        "- If a design description is provided, use it as supplementary guidance, but prioritize the actual visual details in IMAGE 2.",
+        "",
+        "1. PRESERVE THE ORIGINAL BODY",
+        "Preserve the original anatomy, skin tone, skin texture, pores, body hair, wrinkles, lighting, shadows and background.",
+        "Keep the exact original body position, pose, perspective and framing.",
+        "Do not change the person's identity, body shape, proportions or clothing.",
+        "",
+        "2. PLACE THE TATTOO NATURALLY",
+        "Place the tattoo on a visible skin area that suits the reference (forearm, upper arm, shoulder, back, leg, ankle, etc.).",
+        "Follow the body's curvature, perspective and foreshortening.",
+        "Do not place the tattoo over clothing, jewelry, eyes or unrelated objects.",
+        "If no placement is specified, choose the most visible suitable skin area.",
+        "",
+        "3. REPRODUCE THE REFERENCE DESIGN",
+        "Reproduce the tattoo as faithfully as possible: colors or black-and-grey, line work, shading, dotwork, geometry, lettering, proportions and orientation.",
+        "Preserve fine details and do not simplify or invent elements.",
+        "",
+        "4. ADAPT TO THE SKIN SURFACE",
+        "Warp, scale and rotate the design so it follows the body's curvature and perspective.",
+        "Keep the design within the skin, respecting natural contours and edges.",
+        "",
+        "5. PHOTOREALISTIC INTEGRATION",
+        "Render the tattoo as real ink on skin: realistic ink density, subtle subdermal blur, skin texture showing through and natural contrast with lighting and shadows.",
+        "Match the original photograph's lighting, focus, grain and camera perspective.",
+        "Do not make it look like a sticker or a flat overlay.",
+        "",
+        "6. STRICT EDITING CONSTRAINTS",
+        "Modify only the tattooed skin area.",
+        "Do not alter skin, body, clothing, background or any other part of the image.",
+        "Do not add text, watermarks or artificial effects.",
+        "",
+        "FINAL REQUIREMENT:",
+        "Return the edited photograph, not a description, collage, illustration or newly generated image.",
+    ).joinToString("\n")
+
+    val INSTRUCTION_HAIR: String = listOf(
+        "TASK: Perform a photorealistic virtual haircut and beard try-on using two input images.",
+        "",
+        "IMAGE ROLES:",
+        "- IMAGE 1 is the original real portrait photograph and MUST remain the base image.",
+        "- IMAGE 2 is the hairstyle and/or beard reference and is the source of the style only.",
+        "- If a style description is provided, use it as supplementary guidance, but prioritize the actual visual details in IMAGE 2.",
+        "",
+        "1. PRESERVE THE ORIGINAL PERSON",
+        "Preserve the person's identity, face, skin tone, facial features, expression, pose, perspective, lighting, shadows and background.",
+        "Do not change the face, eyes, nose, mouth, skin or age.",
+        "",
+        "2. APPLY THE HAIRSTYLE",
+        "Replace only the hair and, when the reference includes them, the beard, mustache and facial hair.",
+        "Respect the original head shape, hairline, beard growth area and the visible hair length.",
+        "Keep the original hair color unless the reference clearly shows a different color.",
+        "",
+        "3. REPRODUCE THE REFERENCE STYLE",
+        "Reproduce the cut, fade, length, volume, texture, parting, line-up and beard shape as faithfully as possible.",
+        "Preserve distinctive details such as fades, edges, layers, curls, waves and shaved lines.",
+        "",
+        "4. ADAPT TO THE HEAD",
+        "Fit the hairstyle naturally to the head shape, face proportions and camera perspective.",
+        "Respect the original hairline, ears, forehead and neck.",
+        "Do not add hair where there is no scalp or beard area.",
+        "",
+        "5. PHOTOREALISTIC INTEGRATION",
+        "Render realistic hair strands, volume, direction, shine and shadows.",
+        "Match the original photograph's lighting, focus, grain and camera perspective.",
+        "Keep a natural blend between hair, skin and background.",
+        "",
+        "6. STRICT EDITING CONSTRAINTS",
+        "Modify only the hair and facial hair.",
+        "Do not alter the face, skin, clothing, background or any other part of the image.",
+        "Do not add text, watermarks or artificial effects.",
+        "",
+        "FINAL REQUIREMENT:",
+        "Return the edited photograph, not a description, collage, illustration or newly generated image.",
+    ).joinToString("\n")
+
+    fun instruction(category: String): String = when (category.trim().lowercase()) {
+        CATEGORY_TATTOO -> INSTRUCTION_TATTOO
+        CATEGORY_HAIR -> INSTRUCTION_HAIR
+        else -> INSTRUCTION_NAILS
+    }
 }

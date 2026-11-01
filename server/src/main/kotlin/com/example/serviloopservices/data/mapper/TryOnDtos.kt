@@ -11,6 +11,8 @@ data class TryOnRequest(
     val imageMimeType: String = "image/jpeg",
     /** Id del diseño (pertenece a la tienda del usuario). */
     val designId: Int,
+    /** Categoría del Try-On: `nails`, `tattoo` o `hair`. */
+    val category: String = "nails",
     /** Ajuste opcional del usuario. */
     val prompt: String? = null,
 )
