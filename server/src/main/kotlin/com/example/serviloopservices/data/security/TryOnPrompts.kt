@@ -10,7 +10,7 @@ object TryOnPrompts {
     const val CATEGORY_TATTOO = "tattoo"
     const val CATEGORY_HAIR = "hair"
 
-    val DESCRIBE_PROMPT: String = listOf(
+    val DESCRIBE_NAILS: String = listOf(
         "Analyze the nail art reference image carefully.",
         "Identify and describe every visible fingernail design individually.",
         "Use anatomical finger names (thumb, index, middle, ring, pinky) only when confidently identifiable. Otherwise, describe each nail by its position in the image.",
@@ -21,6 +21,27 @@ object TryOnPrompts {
         "Do not invent details that are not visible.",
         "If a nail is hidden, cropped out or cannot be identified, explicitly state that its design or finger identity is unknown.",
         "Generate a concise, actionable instruction in ENGLISH, maximum 130 words, suitable for a photorealistic virtual nail try-on model.",
+    ).joinToString("\n")
+
+    val DESCRIBE_TATTOO: String = listOf(
+        "Analyze the tattoo reference image carefully.",
+        "Describe the tattoo as a whole: subject or motif, style (black-and-grey, realism, fine line, dotwork, traditional, geometric, lettering, ornamental), line work, shading, color palette and level of detail.",
+        "Describe the composition and layout: orientation, proportions, symmetry and how the elements relate to each other.",
+        "Describe the elements that must stay visible when the design is scaled to fit a body area.",
+        "If the image shows several separate designs, describe each of them individually and keep them distinct.",
+        "Do not invent details that are not visible.",
+        "Generate a concise, actionable instruction in ENGLISH, maximum 130 words, suitable for a photorealistic virtual tattoo try-on model.",
+    ).joinToString("\n")
+
+    val DESCRIBE_HAIR: String = listOf(
+        "Analyze the hairstyle and/or beard reference image carefully.",
+        "Identify whether the image shows a haircut, a beard and mustache style or both.",
+        "Describe the cut: length, fade (skin, low, mid or high), taper, layers, volume, texture, parting, line-up, edges and any shaved lines.",
+        "Describe the beard and mustache: shape, length, density, outline and how they connect to the sideburns.",
+        "Describe the hair color and finish only when clearly visible.",
+        "Describe which distinctive details must be preserved when the style is adapted to a different face and head shape.",
+        "Do not invent details that are not visible. If the image does not show a beard, state that explicitly.",
+        "Generate a concise, actionable instruction in ENGLISH, maximum 130 words, suitable for a photorealistic virtual haircut try-on model.",
     ).joinToString("\n")
 
     val INSTRUCTION_NAILS: String = listOf(
@@ -157,5 +178,11 @@ object TryOnPrompts {
         CATEGORY_TATTOO -> INSTRUCTION_TATTOO
         CATEGORY_HAIR -> INSTRUCTION_HAIR
         else -> INSTRUCTION_NAILS
+    }
+
+    fun describe(category: String): String = when (category.trim().lowercase()) {
+        CATEGORY_TATTOO -> DESCRIBE_TATTOO
+        CATEGORY_HAIR -> DESCRIBE_HAIR
+        else -> DESCRIBE_NAILS
     }
 }

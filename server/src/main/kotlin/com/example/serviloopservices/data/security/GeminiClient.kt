@@ -23,12 +23,12 @@ class GeminiClient(
     private val config: GeminiConfig,
 ) {
 
-    suspend fun describeDesign(imageBase64: String, mimeType: String): String {
+    suspend fun describeDesign(imageBase64: String, mimeType: String, category: String): String {
         val request = GeminiRequest(
             contents = listOf(
                 GeminiContent(
                     parts = listOf(
-                        GeminiPart(text = TryOnPrompts.DESCRIBE_PROMPT),
+                        GeminiPart(text = TryOnPrompts.describe(category)),
                         GeminiPart(inlineData = GeminiInlineData(mimeType, imageBase64)),
                     ),
                 ),

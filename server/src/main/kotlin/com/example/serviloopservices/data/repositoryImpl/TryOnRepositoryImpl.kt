@@ -30,7 +30,7 @@ class TryOnRepositoryImpl(
         storeId: Int?,
         category: String?,
     ): List<DesignResponse> =
-        designDao.listByStore(storeId ?: storeIdOf(userId), category).map { it.toResponse() }
+        designDao.listByStore(storeId ?: storeIdOf(userId), category?.trim()?.lowercase()).map { it.toResponse() }
 
     override suspend fun uploadDesign(userId: Int, request: UploadDesignRequest): DesignResult {
         val name = request.name.trim()
@@ -39,14 +39,15 @@ class TryOnRepositoryImpl(
             return DesignResult.InvalidInput(TryOnErrorCode.INVALID_IMAGE)
         }
 
-        val autoPrompt = geminiClient.describeDesign(request.imageBase64, request.mimeType)
+        val category = request.category.trim().lowercase()
+        val autoPrompt = geminiClient.describeDesign(request.imageBase64, request.mimeType, category)
         val combinedPrompt = listOf(autoPrompt, request.prompt.trim(), name)
             .filter { it.isNotBlank() }
             .joinToString("\n")
 
         val entity = designDao.create(
             storeId = storeIdOf(userId),
-            category = request.category,
+            category = category,
             name = name,
             prompt = combinedPrompt,
             imageBase64 = request.imageBase64,

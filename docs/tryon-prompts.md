@@ -9,7 +9,9 @@ These prompts are sent to Gemini. They must stay in **English**.
 | Nails | `nails` | `INSTRUCTION_NAILS` |
 | Tattoo | `tattoo` | `INSTRUCTION_TATTOO` |
 | Hair / beard | `hair` | `INSTRUCTION_HAIR` |
-| Design upload (vision) | — | `DESCRIBE_PROMPT` |
+| Design upload (vision) | `nails` | `DESCRIBE_NAILS` |
+| Design upload (vision) | `tattoo` | `DESCRIBE_TATTOO` |
+| Design upload (vision) | `hair` | `DESCRIBE_HAIR` |
 
 `POST /tryon` accepts `category` (`nails` | `tattoo` | `hair`). Unknown values fall back to `nails`.
 
@@ -157,7 +159,7 @@ Return the edited photograph, not a description, collage, illustration or newly 
 
 ---
 
-## DESCRIBE_PROMPT (design upload / vision)
+## DESCRIBE_NAILS (design upload / vision)
 
 ```text
 Analyze the nail art reference image carefully.
@@ -170,4 +172,33 @@ Preserve the differences between individual nail designs. Never merge them into 
 Do not invent details that are not visible.
 If a nail is hidden, cropped out or cannot be identified, explicitly state that its design or finger identity is unknown.
 Generate a concise, actionable instruction in ENGLISH, maximum 130 words, suitable for a photorealistic virtual nail try-on model.
+```
+
+---
+
+## DESCRIBE_TATTOO (design upload / vision)
+
+```text
+Analyze the tattoo reference image carefully.
+Describe the tattoo as a whole: subject or motif, style (black-and-grey, realism, fine line, dotwork, traditional, geometric, lettering, ornamental), line work, shading, color palette and level of detail.
+Describe the composition and layout: orientation, proportions, symmetry and how the elements relate to each other.
+Describe the elements that must stay visible when the design is scaled to fit a body area.
+If the image shows several separate designs, describe each of them individually and keep them distinct.
+Do not invent details that are not visible.
+Generate a concise, actionable instruction in ENGLISH, maximum 130 words, suitable for a photorealistic virtual tattoo try-on model.
+```
+
+---
+
+## DESCRIBE_HAIR (design upload / vision)
+
+```text
+Analyze the hairstyle and/or beard reference image carefully.
+Identify whether the image shows a haircut, a beard and mustache style or both.
+Describe the cut: length, fade (skin, low, mid or high), taper, layers, volume, texture, parting, line-up, edges and any shaved lines.
+Describe the beard and mustache: shape, length, density, outline and how they connect to the sideburns.
+Describe the hair color and finish only when clearly visible.
+Describe which distinctive details must be preserved when the style is adapted to a different face and head shape.
+Do not invent details that are not visible. If the image does not show a beard, state that explicitly.
+Generate a concise, actionable instruction in ENGLISH, maximum 130 words, suitable for a photorealistic virtual haircut try-on model.
 ```
