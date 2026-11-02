@@ -27,7 +27,7 @@ object DatabaseFactory {
         )
         Database.connect(dataSource)
         transaction {
-            SchemaUtils.create(Users, Designs)
+            SchemaUtils.createMissingTablesAndColumns(Users, Designs)
         }
     }
 

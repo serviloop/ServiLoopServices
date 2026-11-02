@@ -16,7 +16,7 @@ import com.example.serviloopservices.domain.usecase.TryOnResult
 private const val MAX_IMAGE_BASE64_LENGTH = 8 * 1024 * 1024
 
 /**
- * Reglas del Try-On: validación, acceso a diseños **scoped por la tienda del usuario**
+ * Reglas del Try-On: validación, acceso a diseños **scoped por tienda**
  * e integración con Gemini.
  */
 class TryOnRepositoryImpl(
@@ -25,8 +25,12 @@ class TryOnRepositoryImpl(
     private val geminiClient: GeminiClient,
 ) : TryOnRepository {
 
-    override suspend fun listDesigns(userId: Int): List<DesignResponse> =
-        designDao.listByStore(storeIdOf(userId)).map { it.toResponse() }
+    override suspend fun listDesigns(
+        userId: Int,
+        storeId: Int?,
+        category: String?,
+    ): List<DesignResponse> =
+        designDao.listByStore(storeId ?: storeIdOf(userId), category).map { it.toResponse() }
 
     override suspend fun uploadDesign(userId: Int, request: UploadDesignRequest): DesignResult {
         val name = request.name.trim()
@@ -42,6 +46,7 @@ class TryOnRepositoryImpl(
 
         val entity = designDao.create(
             storeId = storeIdOf(userId),
+            category = request.category,
             name = name,
             prompt = combinedPrompt,
             imageBase64 = request.imageBase64,
@@ -62,7 +67,8 @@ class TryOnRepositoryImpl(
         val design = designDao.findById(request.designId) ?: return TryOnResult.DesignNotFound
         if (design.storeId != storeId) return TryOnResult.DesignNotFound
 
-        val baseInstruction = TryOnPrompts.instruction(request.category)
+        val category = design.category.ifBlank { request.category }
+        val baseInstruction = TryOnPrompts.instruction(category)
         val instruction = if (request.prompt.isNullOrBlank()) {
             baseInstruction
         } else {

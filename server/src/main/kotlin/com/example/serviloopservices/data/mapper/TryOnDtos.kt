@@ -28,6 +28,8 @@ data class TryOnResponse(
 @Serializable
 data class DesignResponse(
     val id: Int,
+    val storeId: Int? = null,
+    val category: String = "nails",
     val name: String,
     val prompt: String,
     val imageBase64: String,
@@ -45,6 +47,8 @@ data class UploadDesignRequest(
     val prompt: String = "",
     val imageBase64: String,
     val mimeType: String = "image/png",
+    /** Categoría del diseño: `nails`, `tattoo` o `hair`. */
+    val category: String = "nails",
 )
 
 @Serializable
@@ -55,6 +59,8 @@ data class UploadDesignResponse(
 
 fun DesignEntity.toResponse(): DesignResponse = DesignResponse(
     id = id,
+    storeId = storeId,
+    category = category,
     name = name,
     prompt = prompt,
     imageBase64 = imageBase64,

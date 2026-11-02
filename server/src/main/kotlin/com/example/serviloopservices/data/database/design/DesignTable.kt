@@ -4,10 +4,12 @@ import org.jetbrains.exposed.v1.core.Table
 
 const val DESIGN_NAME_MAX_LENGTH = 120
 const val DESIGN_MIME_MAX_LENGTH = 100
+const val DESIGN_CATEGORY_MAX_LENGTH = 16
 
 object Designs : Table("designs") {
     val id = integer("id").autoIncrement()
     val storeId = integer("store_id").nullable()
+    val category = varchar("category", DESIGN_CATEGORY_MAX_LENGTH).default("nails")
     val name = varchar("name", DESIGN_NAME_MAX_LENGTH)
     val prompt = text("prompt")
     val imageBase64 = text("image_base64")
@@ -20,6 +22,7 @@ object Designs : Table("designs") {
 data class DesignEntity(
     val id: Int,
     val storeId: Int?,
+    val category: String,
     val name: String,
     val prompt: String,
     val imageBase64: String,

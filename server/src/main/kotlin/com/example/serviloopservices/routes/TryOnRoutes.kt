@@ -54,7 +54,9 @@ fun Route.tryOnRoutes(useCase: TryOnUseCase) {
         route("/designs") {
             get {
                 val userId = call.requireUserId() ?: return@get
-                call.respond(HttpStatusCode.OK, DesignListResponse(useCase.listDesigns(userId)))
+                val storeId = call.request.queryParameters["storeId"]?.toIntOrNull()
+                val category = call.request.queryParameters["category"]
+                call.respond(HttpStatusCode.OK, DesignListResponse(useCase.listDesigns(userId, storeId, category)))
             }
 
             post {

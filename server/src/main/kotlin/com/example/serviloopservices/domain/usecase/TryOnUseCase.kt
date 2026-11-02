@@ -7,7 +7,11 @@ import com.example.serviloopservices.domain.repository.TryOnRepository
 
 /** Orquestación mínima: delega cada operación en el repositorio. */
 class TryOnUseCase(private val repository: TryOnRepository) {
-    suspend fun listDesigns(userId: Int): List<DesignResponse> = repository.listDesigns(userId)
+    suspend fun listDesigns(
+        userId: Int,
+        storeId: Int? = null,
+        category: String? = null,
+    ): List<DesignResponse> = repository.listDesigns(userId, storeId, category)
 
     suspend fun uploadDesign(userId: Int, request: UploadDesignRequest): DesignResult =
         repository.uploadDesign(userId, request)
